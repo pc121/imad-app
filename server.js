@@ -23,7 +23,7 @@ app.get('/test-db', function (req, res) {
  //make a select request
  //return responce with results
  
- pool.query('SELECT * FROM test',function(err,result){
+     pool.query('SELECT * FROM test',function(err,result){
      
      if(err){
          res.status(500).send(err.toString());
@@ -35,6 +35,34 @@ app.get('/test-db', function (req, res) {
  });
 });
 
+var counter =0;
+app.get('/counter',function(req,res){
+    counter=counter+1;
+    res.send(counter.toString());
+});
+
+app.get('articles/:articleName',function(req,res){
+    // articleName = articleOne
+    //articles[articleName] == {} content object for article one
+    
+   
+    pool.query('SELECT * FROM articles WHERE title = '+req.params.articleName,function(err,result){
+         if(err){
+            res.status(500).send(err.toString());
+         } 
+        else{
+            if(result.rows.length === 0){
+                res.status(404).send(err.toString()+ ' Article Not Found');
+            } else {
+                var articleData = result.rows[0];
+                res.send(createTemplate(articles[articleData]));
+            }
+            res.send(JSON.stringify(result.rows));
+        }
+    });
+    
+}); 
+
 
 app.get('/ui/style.css', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'style.css'));
@@ -44,11 +72,6 @@ app.get('/ui/madi.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'madi.png'));
 });
 
-var counter =0;
-app.get('/counter',function(req,res){
-    counter=counter+1;
-    res.send(counter.toString());
-});
 
 // Do not change port, otherwise your app won't run on IMAD servers
 // Use 8080 only for local development if you already have apache running on 80
