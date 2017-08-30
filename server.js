@@ -78,7 +78,7 @@ app.get('/counter',function(req,res){
     res.send(counter.toString());
 });
 
-app.get('articles/:articleName',function(req,res){
+app.get('/articles/:articleName',function(req,res){
     // articleName = articleOne
     //articles[articleName] == {} content object for article one
     
