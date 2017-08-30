@@ -18,6 +18,43 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
+
+function createTemplate (data){
+    var title = data.title;
+    var date = data.date;
+    var heading = data.heading;
+    var content = data.content;
+    
+    var htmlTemplate = `
+    <html>
+        <head>
+            <title>
+                ${title}
+            </title>
+            <meta name="viewport" />
+            <link href="/ui/style.css" rel="stylesheet" />
+        </head>
+        <body>
+            <div class="container">
+                <div>
+                <a href="/">Home</a>
+                </div>
+                <hr/>
+                <h3>
+                    ${heading}
+                </h3>
+                <div>
+                    ${date.toDateString()}
+                </div>
+                <div>
+                    ${content}
+                </div>
+            </div>
+        </body>
+    </html>
+    `;
+}
+
 var pool = new Pool(config);
 app.get('/test-db', function (req, res) {
  //make a select request
